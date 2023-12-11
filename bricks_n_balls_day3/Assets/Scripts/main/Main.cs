@@ -32,16 +32,6 @@ public class Main : MonoBehaviour
         ballManager.Update();
         blockManager.Update();
 
-        if (Input.GetMouseButton(0))
-        {
-            launcherManager.DrawDottedLine();
-        }
-        else if (Input.GetMouseButtonUp(0))
-        {
-            ballManager.ShotBalls(launcherManager.GetLauncherData().GetShotDirection());
-            launcherManager.ClearDottedLine();
-        }
-
         // 当たり判定
         for (int i = 0; i < ballManager.GetBallDataList().Count; i++)
         {
@@ -51,6 +41,12 @@ public class Main : MonoBehaviour
 
             if (direction != Vector2.zero)
             {
+                if (direction == Vector2.up)
+                {
+                    ballManager.HitUnderSide(i);
+                    continue;
+                }
+
                 ballManager.HitCollision(i, direction);
                 continue;
             }
@@ -69,6 +65,23 @@ public class Main : MonoBehaviour
                     break;
                 }
             }
+        }
+
+
+        // 発射処理
+        if (!ballManager.GetIsAllStop()) return;
+
+        launcherManager.GetLauncherData().SetPosition(ballManager.GetFirstPosition());
+
+
+        if (Input.GetMouseButton(0))
+        {
+            launcherManager.DrawDottedLine();
+        }
+        else if (Input.GetMouseButtonUp(0))
+        {
+            ballManager.ShotBalls(launcherManager.GetLauncherData().GetShotDirection());
+            launcherManager.ClearDottedLine();
         }
     }
 }
