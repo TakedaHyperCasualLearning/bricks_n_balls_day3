@@ -8,12 +8,15 @@ public class Main : MonoBehaviour
     [SerializeField] private BallManager ballManager = null;
     [SerializeField] private BlockManager blockManager = null;
     [SerializeField] private CollisionManager collisionManager = null;
+    [SerializeField] private LauncherManager launcherManager = null;
+
 
     void Start()
     {
         ballManager.Initialize();
         blockManager.Initialize();
         collisionManager.Initialize();
+        launcherManager.Initialize();
     }
 
     void Update()
@@ -21,6 +24,17 @@ public class Main : MonoBehaviour
         ballManager.Update();
         blockManager.Update();
 
+        if (Input.GetMouseButton(0))
+        {
+            launcherManager.DrawDottedLine();
+        }
+        else if (Input.GetMouseButtonUp(0))
+        {
+            ballManager.ShotBalls(launcherManager.GetLauncherData().GetShotDirection());
+            launcherManager.ClearDottedLine();
+        }
+
+        // 当たり判定
         for (int i = 0; i < ballManager.GetBallDataList().Count; i++)
         {
             if (!ballManager.GetBallDataList()[i].GetIsMoving()) continue;

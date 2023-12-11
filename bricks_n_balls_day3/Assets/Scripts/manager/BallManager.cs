@@ -6,9 +6,12 @@ public class BallManager : MonoBehaviour
 {
     [SerializeField] private GameObject ballPrefab = null;
     private List<BallData> ballList = new List<BallData>();
-    private int COUNT_MAX = 1;
+    private int COUNT_MAX = 50;
     private Vector3 firstPosition = new Vector3(0, -4.5f, 0);
-    private Vector2 shotVelocity = new Vector2(0, 0);
+    private float shotTimer = 0.0f;
+    private float SHOT_INTERVAL = 0.1f;
+    private bool isShitStart = false;
+    private int shotCount = 0;
 
     public void Initialize()
     {
@@ -25,38 +28,35 @@ public class BallManager : MonoBehaviour
 
     public void Update()
     {
-        // ボールを発射する
-        if (Input.GetMouseButtonDown(0))
+        // ボールが飛ぶ処理
+        for (int i = 0; i < ballList.Count; i++)
         {
-            ShotBalls();
+            if (i > shotCount || !ballList[i].GetIsMoving()) break;
+            ballList[i].transform.Translate(ballList[i].GetVelocity() * ballList[i].GetSpeed());
         }
 
-        // ボールが飛ぶ処理
-        ballList.ForEach(BallData =>
-        {
-            if (BallData.GetIsMoving())
-            {
-                BallData.transform.Translate(BallData.GetVelocity() * BallData.GetSpeed());
-            }
-        });
+        if (!isShitStart) return;
+        shotTimer += Time.deltaTime;
+        if (shotTimer < SHOT_INTERVAL) return;
+        shotTimer = 0.0f;
+        if (shotCount >= ballList.Count) return;
+        shotCount++;
     }
 
-    private void ShotBalls()
+    public void ShotBalls(Vector2 velocity)
     {
-        shotVelocity = new Vector2(0.8f, 0.2f).normalized;
+        isShitStart = true;
 
         ballList.ForEach(ball =>
         {
-            ball.SetVelocity(shotVelocity);
+            ball.SetVelocity(velocity);
             ball.SetIsMoving(true);
         });
-
     }
 
     public void HitCollision(int index, Vector2 direction)
     {
         ballList[index].SetVelocity(Vector2.Reflect(ballList[index].GetVelocity(), direction));
-        Debug.Log(direction);
     }
 
     public List<BallData> GetBallDataList()

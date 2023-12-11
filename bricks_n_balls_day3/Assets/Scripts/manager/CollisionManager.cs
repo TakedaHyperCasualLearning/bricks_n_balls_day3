@@ -36,10 +36,10 @@ public class CollisionManager : MonoBehaviour
     {
         Vector2 vector = Vector2.zero;
 
-        if (position.x - radius < -screenEdge.x) vector += Vector2.left;
-        if (position.x + radius > screenEdge.x) vector += Vector2.right;
-        if (position.y - radius < -screenEdge.y) vector += Vector2.down;
-        if (position.y + radius > screenEdge.y) vector += Vector2.up;
+        if (position.x - radius < -screenEdge.x) vector += Vector2.right;
+        if (position.x + radius > screenEdge.x) vector += Vector2.left;
+        if (position.y - radius < -screenEdge.y) vector += Vector2.up;
+        if (position.y + radius > screenEdge.y) vector += Vector2.down;
 
         return vector.normalized;
     }
