@@ -21,11 +21,6 @@ public class LauncherManager : MonoBehaviour
         dottedLineData.SetDotInterval(0.3f);
     }
 
-    public void Update()
-    {
-
-    }
-
     public void DrawDottedLine()
     {
         int dotActiveCount = 0;
@@ -42,32 +37,31 @@ public class LauncherManager : MonoBehaviour
             if (layoutPosition.x < -screenEdge.x || layoutPosition.x > screenEdge.x || layoutPosition.y < -screenEdge.y || layoutPosition.y > screenEdge.y)
             {
                 float edgeDistance = 0.0f;
+                Vector2 reflectNormal = Vector2.zero;
 
                 if (layoutPosition.x < -screenEdge.x)
                 {
                     edgeDistance = (-screenEdge.x - layoutPosition.x) / direction.x;
-                    layoutPosition = layoutPosition + direction * edgeDistance;
-                    direction = Vector2.Reflect(direction, Vector2.right).normalized;
+                    reflectNormal = Vector2.right;
                 }
                 if (layoutPosition.x > screenEdge.x)
                 {
                     edgeDistance = (screenEdge.x - layoutPosition.x) / direction.x;
-                    layoutPosition = layoutPosition + direction * edgeDistance;
-                    direction = Vector2.Reflect(direction, Vector2.left).normalized;
+                    reflectNormal = Vector2.left;
                 }
                 if (layoutPosition.y < -screenEdge.y)
                 {
                     edgeDistance = (-screenEdge.y - layoutPosition.y) / direction.y;
-                    layoutPosition = layoutPosition + direction * edgeDistance;
-                    direction = Vector2.Reflect(direction, Vector2.up).normalized;
+                    reflectNormal = Vector2.up;
                 }
                 if (layoutPosition.y > screenEdge.y)
                 {
                     edgeDistance = (screenEdge.y - layoutPosition.y) / direction.y;
-                    layoutPosition = layoutPosition + direction * edgeDistance;
-                    direction = Vector2.Reflect(direction, Vector2.down).normalized;
+                    reflectNormal = Vector2.down;
                 }
 
+                layoutPosition = layoutPosition + direction * edgeDistance;
+                direction = Vector2.Reflect(direction, reflectNormal).normalized;
                 dottedLineData.GetImpactPointMarker().SetActive(true);
                 dottedLineData.GetImpactPointMarker().transform.position = layoutPosition;
 
@@ -75,7 +69,7 @@ public class LauncherManager : MonoBehaviour
                 {
                     layoutPosition = layoutPosition + direction * dottedLineData.GetDotInterval();
 
-                    if ((dotActiveCount) < dottedLineData.GetDotPointMarkerList().Count)
+                    if (dotActiveCount < dottedLineData.GetDotPointMarkerList().Count)
                     {
                         dottedLineData.GetDotPointMarkerList()[dotActiveCount].transform.position = layoutPosition;
                         dottedLineData.GetDotPointMarkerList()[dotActiveCount].SetActive(true);

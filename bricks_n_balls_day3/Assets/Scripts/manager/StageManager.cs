@@ -24,6 +24,6 @@ public class StageManager : MonoBehaviour
 
     public int GetBlockDurability()
     {
-        return Random.Range(40, 90);
+        return Random.Range(80, 130);
     }
 }

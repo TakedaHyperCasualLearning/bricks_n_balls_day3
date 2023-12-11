@@ -19,7 +19,8 @@ public class BallManager : MonoBehaviour
     private float stopPositionOffset = 0.1f;
     private bool isAllStop = true;
     private float GATHER_TIME = 0.5f;
-    private float countTextOffset = 0.5f;
+    private float countTextOffset = 0.25f;
+    private Vector2 buryOffset = new Vector2(0.05f, 0.05f);
 
     public void Initialize()
     {
@@ -28,8 +29,7 @@ public class BallManager : MonoBehaviour
             GameObject ball = Instantiate(ballPrefab, firstPosition, Quaternion.identity);
             BallData tempBall = ball.GetComponent<BallData>();
             tempBall.SetRadius(ball.transform.localScale.x / 2.0f);
-            tempBall.SetSpeed(0.03f);
-            // tempBall.SetSpeed(5.0f);
+            tempBall.SetSpeed(0.015f);
             ballList.Add(tempBall);
         }
 
@@ -46,7 +46,8 @@ public class BallManager : MonoBehaviour
         // ボールが飛ぶ処理
         for (int i = 0; i < ballList.Count; i++)
         {
-            if (i > shotCount) continue;
+            if (i > shotCount) break;
+
             if (ballList[i].GetIsMoving())
             {
                 ballList[i].transform.Translate(ballList[i].GetVelocity() * ballList[i].GetSpeed());
@@ -107,6 +108,7 @@ public class BallManager : MonoBehaviour
     public void HitCollision(int index, Vector2 direction)
     {
         ballList[index].SetVelocity(Vector2.Reflect(ballList[index].GetVelocity(), direction));
+        ballList[index].transform.Translate(ballList[index].GetVelocity() * buryOffset);
     }
 
     public void HitUnderSide(int index)

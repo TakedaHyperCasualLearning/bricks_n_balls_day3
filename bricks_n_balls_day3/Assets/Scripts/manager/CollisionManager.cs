@@ -11,10 +11,6 @@ public class CollisionManager : MonoBehaviour
         screenEdge = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
     }
 
-    public void Update()
-    {
-    }
-
     public Vector2 CheckCircleToBox(Vector2 circlePosition, Vector2 boxPosition, float radius, Vector2 size)
     {
         Vector2 vector = Vector2.zero;
