@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Main : MonoBehaviour
@@ -35,7 +36,7 @@ public class Main : MonoBehaviour
             // ブロックとの当たり判定
             for (int j = 0; j < blockManager.GetBlockDataList().Count; j++)
             {
-                if (blockManager.GetBlockDataList()[j].GetDurability() <= 0) continue;
+                if (!blockManager.GetBlockDataList()[j].GetIsUnbroken()) continue;
 
                 direction = collisionManager.CheckCircleToBox(ballManager.GetBallDataList()[i].transform.position, blockManager.GetBlockDataList()[j].transform.position, ballManager.GetBallDataList()[i].GetRadius(), blockManager.GetBlockDataList()[j].GetSize()); // ボールとブロックが衝突したかどうかをチェック
 

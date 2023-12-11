@@ -6,7 +6,7 @@ public class BallManager : MonoBehaviour
 {
     [SerializeField] private GameObject ballPrefab = null;
     private List<BallData> ballList = new List<BallData>();
-    private int COUNT_MAX = 100;
+    private int COUNT_MAX = 1;
     private Vector3 firstPosition = new Vector3(0, -4.5f, 0);
     private Vector2 shotVelocity = new Vector2(0, 0);
 
@@ -17,7 +17,8 @@ public class BallManager : MonoBehaviour
             GameObject ball = Instantiate(ballPrefab, firstPosition, Quaternion.identity);
             BallData tempBall = ball.GetComponent<BallData>();
             tempBall.SetRadius(ball.transform.localScale.x / 2.0f);
-            tempBall.SetSpeed(0.05f);
+            tempBall.SetSpeed(0.04f);
+            // tempBall.SetSpeed(5.0f);
             ballList.Add(tempBall);
         }
     }
@@ -55,6 +56,7 @@ public class BallManager : MonoBehaviour
     public void HitCollision(int index, Vector2 direction)
     {
         ballList[index].SetVelocity(Vector2.Reflect(ballList[index].GetVelocity(), direction));
+        Debug.Log(direction);
     }
 
     public List<BallData> GetBallDataList()
