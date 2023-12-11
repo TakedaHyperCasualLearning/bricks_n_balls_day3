@@ -7,11 +7,14 @@ public class BlockData : MonoBehaviour
 {
     private int durability = 0;
     private TextMeshProUGUI durabilityText = null;
+    private Vector2 size = Vector2.zero;
 
 
     public void SetDurability(int durability) { this.durability = durability; }
     public void SetDurabilityText(TextMeshProUGUI durabilityText) { this.durabilityText = durabilityText; }
+    public void SetSize(Vector2 size) { this.size = size; }
     public int GetDurability() { return durability; }
     public TextMeshProUGUI GetDurabilityText() { return durabilityText; }
+    public Vector2 GetSize() { return size; }
 
 }

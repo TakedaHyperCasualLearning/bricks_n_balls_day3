@@ -15,11 +15,14 @@ public class BallManager : MonoBehaviour
         for (int i = 0; i < COUNT_MAX; i++)
         {
             GameObject ball = Instantiate(ballPrefab, firstPosition, Quaternion.identity);
-            ballList.Add(ball.GetComponent<BallData>());
+            BallData tempBall = ball.GetComponent<BallData>();
+            tempBall.SetRadius(ball.transform.localScale.x / 2.0f);
+            tempBall.SetSpeed(0.05f);
+            ballList.Add(tempBall);
         }
     }
 
-    public void Updata()
+    public void Update()
     {
         // ボールを発射する
         if (Input.GetMouseButtonDown(0))
@@ -32,7 +35,7 @@ public class BallManager : MonoBehaviour
         {
             if (BallData.GetIsMoving())
             {
-                BallData.transform.Translate(BallData.GetVelocity());
+                BallData.transform.Translate(BallData.GetVelocity() * BallData.GetSpeed());
             }
         });
     }
@@ -47,5 +50,15 @@ public class BallManager : MonoBehaviour
             ball.SetIsMoving(true);
         });
 
+    }
+
+    public void HitCollision(int index, Vector2 direction)
+    {
+        ballList[index].SetVelocity(Vector2.Reflect(ballList[index].GetVelocity(), direction));
+    }
+
+    public List<BallData> GetBallDataList()
+    {
+        return ballList;
     }
 }

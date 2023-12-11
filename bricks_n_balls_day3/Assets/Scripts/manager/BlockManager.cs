@@ -14,12 +14,31 @@ public class BlockManager : MonoBehaviour
         for (int i = 0; i < COUNT_MAX; i++)
         {
             GameObject block = Instantiate(blockPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-            blockList.Add(block.GetComponent<BlockData>());
+            BlockData tempBlock = block.GetComponent<BlockData>();
+            tempBlock.SetSize(block.transform.localScale / 2.0f);
+            tempBlock.SetDurability(1);
+            blockList.Add(tempBlock);
         }
     }
 
     public void Update()
     {
 
+    }
+
+    public void HitCollision(int index)
+    {
+        Damage(index);
+    }
+
+    public void Damage(int index)
+    {
+        blockList[index].SetDurability(blockList[index].GetDurability() - 1);
+        blockList[index].GetDurabilityText().text = blockList[index].GetDurability().ToString();
+    }
+
+    public List<BlockData> GetBlockDataList()
+    {
+        return blockList;
     }
 }
