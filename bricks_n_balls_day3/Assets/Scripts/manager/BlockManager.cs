@@ -10,7 +10,7 @@ public class BlockManager : MonoBehaviour
     [SerializeField] private Canvas canvas = null;
 
     private List<BlockData> blockList = new List<BlockData>();
-    private int COUNT_MAX = 5;
+    private int COUNT_MAX = 20;
 
     public void Initialize()
     {
@@ -57,6 +57,17 @@ public class BlockManager : MonoBehaviour
         blockList[index].gameObject.SetActive(false);
         blockList[index].GetDurabilityText().gameObject.SetActive(false);
     }
+
+    public void LayoutBlock(int index, Vector2 position, int durability)
+    {
+        blockList[index].transform.position = position;
+        blockList[index].gameObject.SetActive(true);
+        blockList[index].SetDurability(durability);
+        blockList[index].GetDurabilityText().text = blockList[index].GetDurability().ToString();
+        blockList[index].GetDurabilityText().transform.position = blockList[index].transform.position;
+        blockList[index].GetDurabilityText().gameObject.SetActive(true);
+    }
+
 
     public List<BlockData> GetBlockDataList()
     {

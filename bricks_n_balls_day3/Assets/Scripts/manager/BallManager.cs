@@ -20,7 +20,7 @@ public class BallManager : MonoBehaviour
             GameObject ball = Instantiate(ballPrefab, firstPosition, Quaternion.identity);
             BallData tempBall = ball.GetComponent<BallData>();
             tempBall.SetRadius(ball.transform.localScale.x / 2.0f);
-            tempBall.SetSpeed(0.04f);
+            tempBall.SetSpeed(0.03f);
             // tempBall.SetSpeed(5.0f);
             ballList.Add(tempBall);
         }

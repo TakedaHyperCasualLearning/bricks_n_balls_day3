@@ -10,6 +10,8 @@ public class Main : MonoBehaviour
     [SerializeField] private CollisionManager collisionManager = null;
     [SerializeField] private LauncherManager launcherManager = null;
 
+    private StageManager stageManager = new StageManager();
+
 
     void Start()
     {
@@ -17,6 +19,12 @@ public class Main : MonoBehaviour
         blockManager.Initialize();
         collisionManager.Initialize();
         launcherManager.Initialize();
+        stageManager.Initialize();
+
+        for (int i = 0; i < blockManager.GetBlockDataList().Count; i++)
+        {
+            blockManager.LayoutBlock(i, stageManager.GetBlockPosition(i), stageManager.GetBlockDurability());
+        }
     }
 
     void Update()
