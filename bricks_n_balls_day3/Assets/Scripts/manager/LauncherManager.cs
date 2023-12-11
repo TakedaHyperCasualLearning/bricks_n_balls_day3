@@ -14,6 +14,8 @@ public class LauncherManager : MonoBehaviour
 
     public void Initialize()
     {
+        dottedLineData.SetImpactPointMarker(Instantiate(impactPointPrefab, Vector2.zero, Quaternion.identity));
+        dottedLineData.GetImpactPointMarker().SetActive(false);
         screenEdge = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
         launcherData.SetPosition(firstPosition);
         dottedLineData.SetDotInterval(0.3f);
@@ -39,13 +41,35 @@ public class LauncherManager : MonoBehaviour
 
             if (layoutPosition.x < -screenEdge.x || layoutPosition.x > screenEdge.x || layoutPosition.y < -screenEdge.y || layoutPosition.y > screenEdge.y)
             {
-                Vector2 reflectionNormal = Vector2.zero;
-                if (layoutPosition.x < -screenEdge.x) reflectionNormal += Vector2.right;
-                if (layoutPosition.x > screenEdge.x) reflectionNormal += Vector2.left;
-                if (layoutPosition.y < -screenEdge.y) reflectionNormal += Vector2.up;
-                if (layoutPosition.y > screenEdge.y) reflectionNormal += Vector2.down;
+                float edgeDistance = 0.0f;
 
-                direction = Vector2.Reflect(direction, reflectionNormal).normalized;
+                if (layoutPosition.x < -screenEdge.x)
+                {
+                    edgeDistance = (-screenEdge.x - layoutPosition.x) / direction.x;
+                    layoutPosition = layoutPosition + direction * edgeDistance;
+                    direction = Vector2.Reflect(direction, Vector2.right).normalized;
+                }
+                if (layoutPosition.x > screenEdge.x)
+                {
+                    edgeDistance = (screenEdge.x - layoutPosition.x) / direction.x;
+                    layoutPosition = layoutPosition + direction * edgeDistance;
+                    direction = Vector2.Reflect(direction, Vector2.left).normalized;
+                }
+                if (layoutPosition.y < -screenEdge.y)
+                {
+                    edgeDistance = (-screenEdge.y - layoutPosition.y) / direction.y;
+                    layoutPosition = layoutPosition + direction * edgeDistance;
+                    direction = Vector2.Reflect(direction, Vector2.up).normalized;
+                }
+                if (layoutPosition.y > screenEdge.y)
+                {
+                    edgeDistance = (screenEdge.y - layoutPosition.y) / direction.y;
+                    layoutPosition = layoutPosition + direction * edgeDistance;
+                    direction = Vector2.Reflect(direction, Vector2.down).normalized;
+                }
+
+                dottedLineData.GetImpactPointMarker().SetActive(true);
+                dottedLineData.GetImpactPointMarker().transform.position = layoutPosition;
 
                 for (int j = 0; j < REFLECTION_DOT_COUNT; j++)
                 {
@@ -93,6 +117,7 @@ public class LauncherManager : MonoBehaviour
         {
             dottedLineData.GetDotPointMarkerList()[i].SetActive(false);
         }
+        dottedLineData.GetImpactPointMarker().SetActive(false);
     }
 
     public LauncherData GetLauncherData() { return launcherData; }

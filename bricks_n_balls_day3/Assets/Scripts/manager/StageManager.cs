@@ -13,7 +13,6 @@ public class StageManager : MonoBehaviour
     public void Initialize()
     {
         stageSize = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
-        Debug.Log(stageSize);
     }
 
     public Vector2 GetBlockPosition(int index)
